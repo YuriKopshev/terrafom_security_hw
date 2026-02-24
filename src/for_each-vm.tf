@@ -1,5 +1,5 @@
 data "yandex_compute_image" "db" {
-  family = var.vm_db_image_family
+  family = var.vm_image_family
 }
 
 resource "yandex_compute_instance" "db_vms" {
@@ -21,11 +21,12 @@ resource "yandex_compute_instance" "db_vms" {
     }
   }
 
-  network_interface {
-    subnet_id          = yandex_vpc_subnet.develop.id  
-    security_group_ids = var.security_group_ids
-    nat                = true
-  }
+network_interface {
+  subnet_id          = yandex_vpc_subnet.develop.id  
+  security_group_ids = local.security_group_ids 
+  nat                = true
+}
+
 
   scheduling_policy {
     preemptible = true

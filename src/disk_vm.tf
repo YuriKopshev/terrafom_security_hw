@@ -12,7 +12,7 @@ resource "yandex_compute_disk" "storage_disks" {
 
 
 data "yandex_compute_image" "storage" {
-  family = var.vm_web_image_family
+  family = var.vm_image_family
 }
 
 resource "yandex_compute_instance" "storage" {
@@ -32,11 +32,12 @@ resource "yandex_compute_instance" "storage" {
     }
   }
 
-  network_interface {
-    subnet_id          = yandex_vpc_subnet.develop.id
-    security_group_ids = var.security_group_ids
-    nat                = true
-  }
+ network_interface {
+  subnet_id          = yandex_vpc_subnet.develop.id
+  security_group_ids = local.security_group_ids  
+  nat                = true
+}
+
 
   scheduling_policy {
     preemptible = true

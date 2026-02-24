@@ -14,3 +14,7 @@ provider "yandex" {
   zone                     = var.default_zone
   service_account_key_file = "/Users/yuri_kopshev/authorized_key.json"
 }
+
+output "security_group_id" {
+  value = yandex_vpc_security_group.example.id
+}

@@ -1,5 +1,5 @@
 data "yandex_compute_image" "web" {
-  family = var.vm_web_image_family
+  family = var.vm_image_family
 }
 
 resource "yandex_compute_instance" "web_vms" {
@@ -9,7 +9,7 @@ resource "yandex_compute_instance" "web_vms" {
   platform_id = "standard-v3"
   
 
-  depends_on = [yandex_compute_instance.db_vms]
+  #depends_on = [yandex_compute_instance.db_vms]
 
   resources {
     cores         = 2
@@ -24,11 +24,11 @@ resource "yandex_compute_instance" "web_vms" {
     }
   }
 
-  network_interface {
-    subnet_id          = yandex_vpc_subnet.develop.id
-    security_group_ids = var.security_group_ids
-    nat                = true
-  }
+network_interface {
+  subnet_id          = yandex_vpc_subnet.develop.id
+  security_group_ids = local.security_group_ids  
+  nat                = true
+}
 
   scheduling_policy {
     preemptible = true
