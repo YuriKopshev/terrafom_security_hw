@@ -56,19 +56,15 @@ variable "each_vm" {
   description = "Параметры ВМ для баз данных (main и replica)"
 }
 
-variable "vm_db_image_family" {
+variable "vm_image_family" {
   type        = string
   default     = "ubuntu-2204-lts"
-  description = "VM DB image family"
-}
-
-variable "vm_web_image_family" {
-  type        = string
-  default     = "ubuntu-2204-lts"
-  description = "VM Web image family"
+  description = "Общий image family для всех VM"
 }
 
 variable "security_group_ids" {
   type        = list(string)
-  description = "ID группы безопасности из задания 1"
+  default     = []  
+  description = "ID группы безопасности"
 }
+
