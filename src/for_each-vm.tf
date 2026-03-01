@@ -23,7 +23,7 @@ resource "yandex_compute_instance" "db_vms" {
 
 network_interface {
   subnet_id          = yandex_vpc_subnet.develop.id  
-  security_group_ids = local.security_group_ids 
+  security_group_ids = [yandex_vpc_security_group.example.id]
   nat                = true
 }
 
