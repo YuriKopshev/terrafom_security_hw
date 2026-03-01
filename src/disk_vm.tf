@@ -1,13 +1,13 @@
 
 resource "yandex_compute_disk" "storage_disks" {
-  count = 3
+  count = var.vm_storage_disk_count
 
-  name     = "storage-disk-${count.index + 1}"
-  type     = "network-ssd"
-  zone     = var.default_zone
-  size     = 8  # 8 gb
+  name       = "storage-disk-${count.index + 1}"
+  type       = "network-ssd"
+  zone       = var.default_zone
+  size       = var.vm_storage_disk_size
   block_size = 4096
-  image_id = data.yandex_compute_image.web.id  
+  image_id   = data.yandex_compute_image.web.id
 }
 
 
@@ -20,23 +20,23 @@ resource "yandex_compute_instance" "storage" {
   platform_id = "standard-v3"
 
   resources {
-    cores         = 2
-    core_fraction = 20
-    memory        = 2
+    cores         = var.vm_storage_resources.cores
+    core_fraction = var.vm_storage_resources.core_fraction
+    memory        = var.vm_storage_resources.memory
   }
 
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.storage.id
-      size      = 10
+      size     = 10
     }
   }
 
- network_interface {
-  subnet_id          = yandex_vpc_subnet.develop.id
-  security_group_ids = local.security_group_ids  
-  nat                = true
-}
+  network_interface {
+    subnet_id          = yandex_vpc_subnet.develop.id
+    security_group_ids = [yandex_vpc_security_group.example.id]
+    nat                = true
+  }
 
 
   scheduling_policy {
@@ -45,9 +45,9 @@ resource "yandex_compute_instance" "storage" {
 
 
   dynamic "secondary_disk" {
-    for_each = yandex_compute_disk.storage_disks  
+    for_each = yandex_compute_disk.storage_disks
     content {
-      disk_id = secondary_disk.value.id
+      disk_id     = secondary_disk.value.id
       auto_delete = true
     }
   }

@@ -7,28 +7,27 @@ resource "yandex_compute_instance" "web_vms" {
 
   name        = "web-${count.index + 1}"
   platform_id = "standard-v3"
-  
 
-  #depends_on = [yandex_compute_instance.db_vms]
 
-  resources {
-    cores         = 2
-    core_fraction = 20
-    memory        = 2
-  }
+
+resources {
+  cores         = var.vm_web_resources.cores        
+  core_fraction = var.vm_web_resources.core_fraction 
+  memory        = var.vm_web_resources.memory       
+}
 
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.web.id
-      size      = 10
+      size     = var.vm_web_disk_size
     }
   }
 
-network_interface {
-  subnet_id          = yandex_vpc_subnet.develop.id
-  security_group_ids = local.security_group_ids  
-  nat                = true
-}
+  network_interface {
+    subnet_id          = yandex_vpc_subnet.develop.id
+    security_group_ids = [yandex_vpc_security_group.example.id]
+    nat                = true
+  }
 
   scheduling_policy {
     preemptible = true

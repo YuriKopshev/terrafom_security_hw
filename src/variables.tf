@@ -56,15 +56,54 @@ variable "each_vm" {
   description = "Параметры ВМ для баз данных (main и replica)"
 }
 
+variable "vm_web_resources" {
+  type = object({
+    cores         = number
+    core_fraction = number
+    memory        = number
+  })
+  default = {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
+}
+
+variable "vm_web_disk_size" {
+  type    = number
+  default = 10
+}
+
+variable "vm_storage_resources" {
+  type = object({
+    cores         = number
+    core_fraction = number
+    memory        = number
+  })
+  default = {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
+}
+
+variable "vm_storage_disk_size" {
+  type    = number
+  default = 8
+  description = "Storage VM disk size"
+}
+
+variable "vm_storage_disk_count" {
+  type    = number
+  default = 3
+  description = "Storage VM secondary disks count"
+}
+
+
 variable "vm_image_family" {
   type        = string
   default     = "ubuntu-2204-lts"
   description = "Общий image family для всех VM"
 }
 
-variable "security_group_ids" {
-  type        = list(string)
-  default     = []  
-  description = "ID группы безопасности"
-}
 
